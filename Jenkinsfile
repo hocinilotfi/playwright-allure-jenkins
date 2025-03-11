@@ -14,18 +14,20 @@ pipeline {
             }
             stage('Run Playwright Tests') {
                 steps {
-                    sh 'npx playwright test --reporter=line,allure-playwright'
-                    stash name: 'allure-results', includes: 'allure-results/*'
+                        script{
+                            sh 'npx playwright test --reporter=line,allure-playwright'
+                                stash name: 'allure-results', includes: 'allure-results/*'
+                        }
                 }
             }
+
         }
 
-        // stage('Install Allure Commandline') {
-        //     steps {
-        //         sh 'npm install --prefix ./node_modules allure-commandline --save-dev'
-        //     }
-        // }
-
+    // stage('Install Allure Commandline') {
+    //     steps {
+    //         sh 'npm install --prefix ./node_modules allure-commandline --save-dev'
+    //     }
+    // }
     }
     post {
         always {
