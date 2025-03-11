@@ -5,6 +5,13 @@
         }
     }
     stages {
+   
+
+        // stage('Install Allure Commandline') {
+        //     steps {
+        //         sh 'npm install --prefix ./node_modules allure-commandline --save-dev'
+        //     }
+        // }
 
         stage('Run Playwright install') {
             steps {
@@ -19,7 +26,8 @@
 
         
     }
-    always {
+    post{
+        always {
             unstash 'allure-results' //extract results
             script {
                 allure([
@@ -30,5 +38,7 @@
                 results: [[path: 'allure-results']]
             ])
             }
+        }
+
     }
 }
