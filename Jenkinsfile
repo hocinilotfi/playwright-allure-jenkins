@@ -31,7 +31,7 @@
             // allure([
             //     includeProperties: false, jdk: '', results: [[path: './allure-results']]
             // ])
-            archiveArtifacts artifacts: './allure-results/*.*', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'allure-results/*.*'
         }
 
     }
