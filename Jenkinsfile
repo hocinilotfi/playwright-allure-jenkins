@@ -7,19 +7,15 @@ pipeline {
                     image 'mcr.microsoft.com/playwright:v1.51.0-noble'
                 }
             }
-            stage('Run Playwright install') {
-                steps {
-                    sh 'npm ci'
-                }
-            }
-            stage('Run Playwright Tests') {
+            
                 steps {
                         script{
+                            sh 'npm ci'
                             sh 'npx playwright test --reporter=line,allure-playwright'
                                 stash name: 'allure-results', includes: 'allure-results/*'
                         }
                 }
-            }
+            
 
         }
 
