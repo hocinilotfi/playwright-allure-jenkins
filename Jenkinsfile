@@ -5,13 +5,6 @@
         }
     }
     stages {
-   
-
-        // stage('Install Allure Commandline') {
-        //     steps {
-        //         sh 'npm install --prefix ./node_modules allure-commandline --save-dev'
-        //     }
-        // }
 
         stage('Run Playwright install') {
             steps {
@@ -26,14 +19,16 @@
 
         
     }
-    post{
-        always {
-            allure includeProperties:
-                     false,
-                     jdk: '',
-                     results: [[path: 'allure-results']]
-            // archiveArtifacts artifacts: 'allure-results/*.*'
-        }
-
+    always {
+            unstash 'allure-results' //extract results
+            script {
+                allure([
+                includeProperties: false,
+                jdk: '',
+                properties: [],
+                reportBuildPolicy: 'ALWAYS',
+                results: [[path: 'allure-results']]
+            ])
+            }
     }
 }
