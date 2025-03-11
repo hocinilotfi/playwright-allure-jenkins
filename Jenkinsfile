@@ -1,11 +1,24 @@
- pipeline {
-    agent {
-        docker {
-            image 'mcr.microsoft.com/playwright:v1.51.0-noble'
-        }
-    }
+pipeline {
+    agent any
     stages {
-   
+        stage('build and install') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.51.0-noble'
+                }
+            }
+            stage('Run Playwright install') {
+                steps {
+                    sh 'npm ci'
+                }
+            }
+            stage('Run Playwright Tests') {
+                steps {
+                    sh 'npx playwright test --reporter=line,allure-playwright'
+                    stash name: 'allure-results', includes: 'allure-results/*'
+                }
+            }
+        }
 
         // stage('Install Allure Commandline') {
         //     steps {
@@ -13,22 +26,10 @@
         //     }
         // }
 
-        stage('Run Playwright install') {
-            steps {
-                sh 'npm ci'
-            }
-        }
-        stage('Run Playwright Tests') {
-            steps {
-                sh 'npx playwright test --reporter=line,allure-playwright'
-            }
-        }
-
-        
     }
-    post{
+    post {
         always {
-            // unstash 'allure-results' //extract results
+            unstash 'allure-results' //extract results
             script {
                 allure([
                 includeProperties: false,
@@ -39,6 +40,5 @@
             ])
             }
         }
-
     }
 }
