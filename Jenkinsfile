@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('build and install') {
+        
             agent {
                 docker {
                     image 'mcr.microsoft.com/playwright:v1.51.0-noble'
@@ -19,7 +19,7 @@ pipeline {
                                 stash name: 'allure-results', includes: 'allure-results/*'
                         }
                 }
-            }
+            
 
         }
 
